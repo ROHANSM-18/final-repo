@@ -58,10 +58,9 @@ const DoctorHome = () => {
 
   const [open, setOpen] = useState(false);
   const [logoutSnackbarOpen, setLogoutSnackbarOpen] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState(null); // State for selected patient
+  const [selectedPatient, setSelectedPatient] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [patientAdded, setPatientAdded] = useState(false); // State for patient added status
-
+  const [patientAdded, setPatientAdded] = useState(false); 
   const calculateAge = (dateOfBirth) => {
     const birthDate = new Date(dateOfBirth);
     const currentDate = new Date();
@@ -76,15 +75,12 @@ const DoctorHome = () => {
 
   const [addDoctorToPatient] = useMutation(ADD_DOCTOR_TO_PATIENT, {
     onCompleted: (data) => {
-      // Handle the mutation completion here
-      setPatientAdded(true); // Set the patientAdded state to true
+      setPatientAdded(true); 
     },
     onError: (error) => {
-      // Handle any mutation errors here
     },
   });
 
-  // Use the useEffect hook to refresh the window when patientAdded becomes true
   useEffect(() => {
     if (patientAdded) {
       window.location.reload();
@@ -108,7 +104,7 @@ const DoctorHome = () => {
 
   const handlePatientSelect = (patient) => {
     setSelectedPatient(patient);
-    setAnchorEl(null); // Close the dropdown menu
+    setAnchorEl(null); 
   };
 
   const handleAddDoctorToPatient = () => {

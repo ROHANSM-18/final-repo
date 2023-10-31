@@ -22,9 +22,12 @@ import {
   IconButton,
   ThemeProvider,
   createTheme,
+  FormControl, InputLabel, MenuItem, Select,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import MuiAlert from '@mui/material/Alert';
+import backgroundImage from '../components/Screenshot_1.png';
+
 
 const theme = createTheme({
   palette: {
@@ -82,12 +85,19 @@ const DoctorVitals = () => {
   const handleSnackbarClose = () => {
     setLogoutSnackbarOpen(false);
   };
+
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleDateString();
+  };  
+
+
   const doctor = doctorData.getDoctorByUserId;
   const name = doctor.FirstName[0];
 
   return (
     <ThemeProvider theme={theme}>
-      <div>
+      <div style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundRepeat: 'repeat', height:'100vh'}}>
         <AppBar position="static">
           <Toolbar>
             <Grid container alignItems="center" justifyContent="space-between">
@@ -136,8 +146,8 @@ const DoctorVitals = () => {
         </AppBar>
 
         <div>
-          <h1>Doctor Vitals</h1>
-          <div>
+          <h1>Patients Vitals</h1>
+          {/* <div>
             <label>Select a Patient:</label>
             <select value={selectedPatient} onChange={(e) => handlePatientSelect(e.target.value)}>
               <option value="">Select a Patient</option>
@@ -147,11 +157,31 @@ const DoctorVitals = () => {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
+
+<FormControl variant="outlined" style={{width: '40%', marginBottom:'5vh'}}>
+  <InputLabel id="patient-select-label">Select a Patient</InputLabel>
+  <Select
+    labelId="patient-select-label"
+    id="patient-select"
+    value={selectedPatient}
+    onChange={(e) => handlePatientSelect(e.target.value)}
+    label="Select a Patient"
+  >
+    <MenuItem value="">
+      <em>Select a Patient</em>
+    </MenuItem>
+    {filteredPatients.map((patient) => (
+      <MenuItem key={patient.PatientID} value={patient.PatientID}>
+        {`${patient.FirstName} ${patient.LastName}`}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
+      
 
           {selectedPatient && (
             <div>
-              <h2>Vitals for Patient: {selectedPatient}</h2>
               {vitalsLoading ? (
                 <p>Loading vitals data...</p>
               ) : vitalsError ? (
@@ -179,7 +209,7 @@ const DoctorVitals = () => {
                           <TableCell>{vitalEntry.Temperature}</TableCell>
                           <TableCell>{vitalEntry.OxygenSaturation}</TableCell>
                           <TableCell>{vitalEntry.VisitAppointment.VisitID}</TableCell>
-                          <TableCell>{vitalEntry.VisitAppointment.DateAndTime}</TableCell>
+                          <TableCell>{formatDate(vitalEntry.VisitAppointment.DateAndTime)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
